@@ -1,0 +1,5049 @@
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+      maximum-scale=1.0, user-scalable=no">
+
+<title>一分钟逃离办公室</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#F4F3EF;
+    color:#4D514F;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "PingFang SC",
+        "Microsoft YaHei",
+        sans-serif;
+}
+
+button,input{
+    font:inherit;
+}
+
+button{
+    border:0;
+    background:none;
+    color:inherit;
+    cursor:pointer;
+}
+
+.screen{
+    position:absolute;
+    inset:0;
+    display:none;
+}
+
+.screen.active{
+    display:flex;
+}
+
+
+/* =========================
+   首页
+========================= */
+
+#home{
+    justify-content:center;
+    align-items:center;
+    padding:30px;
+}
+
+.home-inner{
+    width:min(100%,430px);
+}
+
+.weekday{
+    font-size:15px;
+    letter-spacing:2px;
+    color:#8B908D;
+    margin-bottom:10px;
+}
+
+.clock{
+    font-size:20px;
+    letter-spacing:1px;
+    margin-bottom:38px;
+}
+
+.count-label{
+    font-size:14px;
+    color:#969B97;
+    margin-bottom:8px;
+}
+
+.countdown{
+    font-size:42px;
+    line-height:1.1;
+    margin-bottom:30px;
+}
+
+.escape-button{
+    width:100%;
+    padding:17px 20px;
+    border:1px solid #B8BCB8;
+    border-radius:14px;
+    background:#FAF9F6;
+    font-size:16px;
+    text-align:left;
+}
+
+.escape-button:active{
+    transform:scale(.98);
+}
+
+.home-row{
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+}
+
+.small-button{
+    flex:1;
+    padding:13px;
+    border:1px solid #D2D2CC;
+    border-radius:12px;
+    background:#F8F7F3;
+    font-size:13px;
+}
+
+.section-title{
+    margin-top:36px;
+    margin-bottom:13px;
+    font-size:13px;
+    color:#8B908D;
+}
+
+.character-list{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+}
+
+.character-card{
+    padding:12px 4px 10px;
+    border:1px solid #D7D6D0;
+    border-radius:12px;
+    background:#FAF9F6;
+    text-align:center;
+}
+
+.character-card.selected{
+    border-color:#8D9690;
+    background:#ECEDE7;
+}
+
+.character-icon{
+    width:54px;
+    height:54px;
+    margin:auto;
+}
+
+.character-name{
+    margin-top:4px;
+    font-size:12px;
+    color:#737874;
+}
+
+.home-note{
+    margin-top:20px;
+    font-size:12px;
+    line-height:1.7;
+    color:#A0A39F;
+}
+
+
+/* =========================
+   设置
+========================= */
+
+#settings{
+    justify-content:center;
+    align-items:center;
+    padding:30px;
+}
+
+.settings-inner{
+    width:min(100%,430px);
+}
+
+.back{
+    margin-bottom:35px;
+    color:#858A86;
+    font-size:14px;
+}
+
+.setting-title{
+    font-size:25px;
+    margin-bottom:28px;
+}
+
+.setting-item{
+    padding:18px 0;
+    border-bottom:1px solid #DCDCD6;
+}
+
+.setting-label{
+    font-size:14px;
+    margin-bottom:10px;
+}
+
+.setting-desc{
+    font-size:12px;
+    color:#999D99;
+    line-height:1.6;
+    margin-bottom:12px;
+}
+
+.time-input{
+    width:100%;
+    padding:13px;
+    border:1px solid #C9CBC6;
+    border-radius:10px;
+    background:#FAF9F6;
+    color:#4D514F;
+    outline:none;
+}
+
+.toggle-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.toggle{
+    width:48px;
+    height:28px;
+    border-radius:20px;
+    background:#D3D5D0;
+    position:relative;
+}
+
+.toggle-dot{
+    position:absolute;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:#FAF9F6;
+    left:3px;
+    top:3px;
+    transition:.2s;
+}
+
+.toggle.on{
+    background:#9AA69B;
+}
+
+.toggle.on .toggle-dot{
+    left:23px;
+}
+
+
+/* =========================
+   图鉴
+========================= */
+
+#collection{
+    justify-content:center;
+    align-items:center;
+    padding:25px;
+}
+
+.collection-inner{
+    width:min(100%,500px);
+    height:min(92vh,760px);
+    overflow:auto;
+}
+
+.collection-head{
+    margin-bottom:25px;
+}
+
+.collection-title{
+    font-size:27px;
+}
+
+.collection-count{
+    color:#929791;
+    font-size:13px;
+    margin-top:5px;
+}
+
+.collection-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.collect-card{
+    min-height:135px;
+    border:1px solid #D6D6D0;
+    border-radius:12px;
+    background:#FAF9F6;
+    padding:12px 8px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+.collect-card.locked{
+    background:#ECEBE6;
+}
+
+.collect-icon{
+    width:55px;
+    height:55px;
+}
+
+.collect-name{
+    font-size:12px;
+}
+
+.collect-desc{
+    font-size:10px;
+    color:#999D99;
+    margin-top:5px;
+    line-height:1.4;
+}
+
+
+/* =========================
+   游戏
+========================= */
+
+#game{
+    justify-content:center;
+    align-items:center;
+    background:#EEEDE8;
+}
+
+.game-stage{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
+
+canvas{
+    display:block;
+    touch-action:none;
+    user-select:none;
+}
+
+.game-top{
+    position:absolute;
+    left:50%;
+    top:16px;
+    transform:translateX(-50%);
+    width:min(360px,calc(100vw - 28px));
+    z-index:5;
+    pointer-events:none;
+}
+
+.game-top-inner{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.game-title{
+    font-size:13px;
+    letter-spacing:1px;
+}
+
+.game-status{
+    font-size:12px;
+    color:#858A86;
+    margin-top:4px;
+}
+
+.menu-button{
+    pointer-events:auto;
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    background:rgba(250,249,246,.9);
+    border:1px solid #D4D4CE;
+    font-size:18px;
+}
+
+
+/* =========================
+   工作伪装
+========================= */
+
+.work-mask{
+    position:absolute;
+    inset:0;
+    z-index:20;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    background:#F4F3EF;
+}
+
+.work-mask.active{
+    display:flex;
+}
+
+.work-page{
+    width:min(90%,390px);
+}
+
+.work-head{
+    font-size:14px;
+    margin-bottom:30px;
+}
+
+.work-list{
+    border-top:1px solid #D4D5D0;
+}
+
+.work-task{
+    padding:17px 0;
+    border-bottom:1px solid #D4D5D0;
+    font-size:13px;
+}
+
+.work-state{
+    margin-top:25px;
+    color:#969B97;
+    font-size:12px;
+}
+
+
+/* =========================
+   结果
+========================= */
+
+.modal{
+    position:absolute;
+    inset:0;
+    z-index:30;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:rgba(244,243,239,.94);
+    padding:25px;
+}
+
+.modal.active{
+    display:flex;
+}
+
+.modal-inner{
+    width:min(100%,360px);
+}
+
+.result-small{
+    color:#979B97;
+    font-size:12px;
+    margin-bottom:8px;
+}
+
+.result-title{
+    font-size:30px;
+    margin-bottom:13px;
+}
+
+.result-text{
+    font-size:13px;
+    color:#7D827E;
+    line-height:1.8;
+    margin-bottom:28px;
+}
+
+.result-button{
+    width:100%;
+    padding:15px;
+    border:1px solid #C8CAC5;
+    border-radius:12px;
+    background:#FAF9F6;
+    margin-bottom:9px;
+    text-align:left;
+}
+
+
+/* =========================
+   收集提示
+========================= */
+
+.collect-hint{
+    position:absolute;
+    left:50%;
+    bottom:58px;
+    transform:translateX(-50%);
+    z-index:10;
+
+    padding:10px 16px;
+
+    border:1px solid #C9CBC6;
+    border-radius:20px;
+
+    background:rgba(250,249,246,.94);
+
+    font-size:12px;
+
+    display:none;
+
+    white-space:nowrap;
+}
+
+.collect-hint.show{
+    display:block;
+}
+
+
+/* =========================
+   躲藏提示
+========================= */
+
+.hide-hint{
+    position:absolute;
+    left:50%;
+    bottom:102px;
+    transform:translateX(-50%);
+    z-index:11;
+
+    padding:10px 16px;
+
+    border:1px solid #C9CBC6;
+    border-radius:20px;
+
+    background:rgba(250,249,246,.94);
+
+    font-size:12px;
+
+    display:none;
+
+    white-space:nowrap;
+}
+
+.hide-hint.show{
+    display:block;
+}
+
+
+/* =========================
+   Toast
+========================= */
+
+.toast{
+    position:absolute;
+    left:50%;
+    bottom:30px;
+    transform:translateX(-50%) translateY(15px);
+    z-index:50;
+
+    padding:10px 15px;
+
+    border:1px solid #D0D1CB;
+    background:rgba(250,249,246,.96);
+    border-radius:20px;
+
+    font-size:12px;
+
+    opacity:0;
+    pointer-events:none;
+
+    transition:.25s;
+    white-space:nowrap;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+</style>
+</head>
+
+<body>
+
+
+<!-- =========================
+     首页
+========================= -->
+
+<div id="home" class="screen active">
+
+<div class="home-inner">
+
+    <div id="weekday" class="weekday">
+        Friday
+    </div>
+
+    <div id="clock" class="clock">
+        17:13
+    </div>
+
+    <div class="count-label">
+        距离下班还有
+    </div>
+
+    <div id="countdown" class="countdown">
+        47 分钟
+    </div>
+
+    <button class="escape-button"
+            onclick="startGame()">
+        今天就这样 →
+    </button>
+
+
+    <div class="home-row">
+
+        <button class="small-button"
+                onclick="openCollection()">
+            摸鱼图鉴
+        </button>
+
+        <button class="small-button"
+                onclick="openSettings()">
+            下班时间
+        </button>
+
+    </div>
+
+
+    <div class="section-title">
+        今天想当什么？
+    </div>
+
+
+    <div class="character-list">
+
+        <button class="character-card selected"
+                data-character="human"
+                onclick="selectCharacter('human')">
+
+            <div class="character-icon"
+                 data-character-icon="human"></div>
+
+            <div class="character-name">
+                人
+            </div>
+
+        </button>
+
+
+        <button class="character-card"
+                data-character="monkey"
+                onclick="selectCharacter('monkey')">
+
+            <div class="character-icon"
+                 data-character-icon="monkey"></div>
+
+            <div class="character-name">
+                猴
+            </div>
+
+        </button>
+
+
+        <button class="character-card"
+                data-character="frog"
+                onclick="selectCharacter('frog')">
+
+            <div class="character-icon"
+                 data-character-icon="frog"></div>
+
+            <div class="character-name">
+                蛙
+            </div>
+
+        </button>
+
+
+        <button class="character-card"
+                data-character="cat"
+                onclick="selectCharacter('cat')">
+
+            <div class="character-icon"
+                 data-character-icon="cat"></div>
+
+            <div class="character-name">
+                猫
+            </div>
+
+        </button>
+
+    </div>
+
+
+    <div class="home-note">
+        今天也很累了。<br>
+        不想当人也没关系。
+    </div>
+
+</div>
+</div>
+
+
+<!-- =========================
+     设置
+========================= -->
+
+<div id="settings" class="screen">
+
+<div class="settings-inner">
+
+    <button class="back"
+            onclick="showScreen('home')">
+        ← 返回
+    </button>
+
+    <div class="setting-title">
+        设置
+    </div>
+
+
+    <div class="setting-item">
+
+        <div class="setting-label">
+            我的下班时间
+        </div>
+
+        <div class="setting-desc">
+            每个人的下班时间都不一样。<br>
+            设置一个属于你的时间。
+        </div>
+
+        <input
+            id="workEndInput"
+            class="time-input"
+            type="time"
+            value="18:00"
+            onchange="saveSettings()"
+        >
+
+    </div>
+
+
+    <div class="setting-item">
+
+        <div class="toggle-row">
+
+            <div>
+
+                <div class="setting-label">
+                    试玩模式
+                </div>
+
+                <div class="setting-desc">
+                    不受下班时间限制，随时可以逃。
+                </div>
+
+            </div>
+
+            <button id="testToggle"
+                    class="toggle on"
+                    onclick="toggleTestMode()">
+
+                <div class="toggle-dot"></div>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+
+<!-- =========================
+     图鉴
+========================= -->
+
+<div id="collection" class="screen">
+
+<div class="collection-inner">
+
+    <button class="back"
+            onclick="showScreen('home')">
+        ← 返回
+    </button>
+
+
+    <div class="collection-head">
+
+        <div class="collection-title">
+            摸鱼图鉴
+        </div>
+
+        <div id="collectionCount"
+             class="collection-count">
+            0 / 12
+        </div>
+
+    </div>
+
+
+    <div id="collectionGrid"
+         class="collection-grid">
+    </div>
+
+</div>
+</div>
+
+
+<!-- =========================
+     游戏
+========================= -->
+
+<div id="game" class="screen">
+
+<div class="game-stage"
+     id="gameStage">
+
+
+    <canvas id="gameCanvas"
+            width="360"
+            height="720">
+    </canvas>
+
+
+    <div class="game-top">
+
+        <div class="game-top-inner">
+
+            <div>
+
+                <div class="game-title">
+                    躲老板
+                </div>
+
+                <div id="gameStatus"
+                     class="game-status">
+                    找地方躲起来
+                </div>
+
+            </div>
+
+
+            <button class="menu-button"
+                    onclick="showWorkMask()">
+                ···
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div id="collectHint"
+         class="collect-hint">
+        点击收集
+    </div>
+
+
+    <div id="hideHint"
+         class="hide-hint">
+        可以躲
+    </div>
+
+
+    <!-- 工作伪装 -->
+
+    <div id="workMask"
+         class="work-mask">
+
+        <div class="work-page">
+
+            <div class="work-head">
+                今日工作安排
+            </div>
+
+            <div class="work-list">
+
+                <div class="work-task">
+                    □ 完成日报
+                </div>
+
+                <div class="work-task">
+                    □ 回复邮件
+                </div>
+
+                <div class="work-task">
+                    □ 项目资料整理
+                </div>
+
+                <div class="work-task">
+                    □ 明日工作安排
+                </div>
+
+            </div>
+
+            <div class="work-state">
+                当前状态：进行中
+            </div>
+
+            <button class="back"
+                    style="margin-top:30px"
+                    onclick="hideWorkMask()">
+                继续工作
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- 结果 -->
+
+    <div id="resultModal"
+         class="modal">
+
+        <div class="modal-inner">
+
+            <div class="result-small">
+                今日逃跑记录
+            </div>
+
+            <div id="resultTitle"
+                 class="result-title">
+                逃跑成功
+            </div>
+
+            <div id="resultText"
+                 class="result-text">
+                老板没有发现你。
+            </div>
+
+            <button class="result-button"
+                    onclick="backHome()">
+                回到首页 →
+            </button>
+
+            <button class="result-button"
+                    onclick="restartGame()">
+                再逃一次
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div id="toast"
+         class="toast">
+    </div>
+
+</div>
+</div>
+
+
+
+<script>
+
+/* =====================================================
+   基础
+===================================================== */
+
+const CW = 360;
+const CH = 720;
+
+const canvas =
+    document.getElementById("gameCanvas");
+
+const ctx =
+    canvas.getContext("2d");
+
+const gameStage =
+    document.getElementById("gameStage");
+
+
+/* =====================================================
+   存储
+===================================================== */
+
+let selectedCharacter =
+    localStorage.getItem("officeCharacter")
+    || "human";
+
+let workEnd =
+    localStorage.getItem("officeWorkEnd")
+    || "18:00";
+
+let testMode =
+    localStorage.getItem("officeTestMode");
+
+if(testMode === null){
+
+    testMode = "true";
+
+    localStorage.setItem(
+        "officeTestMode",
+        "true"
+    );
+
+}
+
+
+let collected =
+    JSON.parse(
+        localStorage.getItem(
+            "officeCollected"
+        ) || "[]"
+    );
+
+
+/* =====================================================
+   图鉴
+===================================================== */
+
+const collectibles = [
+
+    {
+        id:"plant",
+        name:"工位植物",
+        desc:"它比你更想下班。",
+        type:"plant"
+    },
+
+    {
+        id:"coffee",
+        name:"隔夜咖啡",
+        desc:"已经没人记得它是什么时候出现的。",
+        type:"coffee"
+    },
+
+    {
+        id:"clip",
+        name:"神秘回形针",
+        desc:"没有人知道它属于谁。",
+        type:"clip"
+    },
+
+    {
+        id:"printer",
+        name:"卡纸的打印机",
+        desc:"今天第三次。",
+        type:"printer"
+    },
+
+    {
+        id:"key",
+        name:"神秘钥匙",
+        desc:"先留着。",
+        type:"key"
+    },
+
+    {
+        id:"deadplant",
+        name:"枯掉的盆栽",
+        desc:"它已经放弃了。",
+        type:"deadplant"
+    },
+
+    {
+        id:"leave",
+        name:"未提交的请假条",
+        desc:"日期还是空白。",
+        type:"leave"
+    },
+
+    {
+        id:"banana",
+        name:"不知道谁的香蕉",
+        desc:"猴子表示很感兴趣。",
+        type:"banana"
+    },
+
+    {
+        id:"box",
+        name:"神秘纸箱",
+        desc:"猫知道里面有什么。",
+        type:"box"
+    },
+
+    {
+        id:"card",
+        name:"临时门禁卡",
+        desc:"不知道能刷开什么。",
+        type:"card"
+    },
+
+    {
+        id:"pen",
+        name:"消失的黑笔",
+        desc:"每个办公室都有一支。",
+        type:"pen"
+    },
+
+    {
+        id:"cookie",
+        name:"同事藏起来的饼干",
+        desc:"你没有告诉任何人。",
+        type:"cookie"
+    }
+
+];
+
+
+/* =====================================================
+   屏幕
+===================================================== */
+
+function showScreen(id){
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(s=>{
+            s.classList.remove("active");
+        });
+
+    document
+        .getElementById(id)
+        .classList.add("active");
+}
+
+
+/* =====================================================
+   角色选择
+===================================================== */
+
+function selectCharacter(type){
+
+    selectedCharacter = type;
+
+    localStorage.setItem(
+        "officeCharacter",
+        type
+    );
+
+    updateCharacterCards();
+}
+
+
+function updateCharacterCards(){
+
+    document
+        .querySelectorAll(".character-card")
+        .forEach(card=>{
+
+            card.classList.toggle(
+                "selected",
+                card.dataset.character
+                === selectedCharacter
+            );
+
+        });
+
+}
+
+
+/* =====================================================
+   统一角色绘制
+===================================================== */
+
+function drawCharacter(
+    ctx,
+    x,
+    y,
+    type,
+    scale=1
+){
+
+    ctx.save();
+
+    ctx.translate(x,y);
+
+    ctx.scale(scale,scale);
+
+    /*
+     * 阴影
+     */
+
+    ctx.fillStyle =
+        "rgba(77,81,79,.12)";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,
+        23,
+        17,
+        5,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /* =====================
+       人
+    ===================== */
+
+    if(type === "human"){
+
+        ctx.fillStyle =
+            "#C8A58B";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            0,
+            -12,
+            14,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "#626863";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            0,
+            -15,
+            14,
+            Math.PI,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+        ctx.fillRect(
+            -14,
+            -15,
+            6,
+            22
+        );
+
+        ctx.fillRect(
+            8,
+            -15,
+            6,
+            22
+        );
+
+
+        ctx.fillStyle =
+            "#AAB5A4";
+
+        ctx.beginPath();
+
+        ctx.roundRect(
+            -14,
+            3,
+            28,
+            28,
+            8
+        );
+
+        ctx.fill();
+
+
+        ctx.strokeStyle =
+            "#666C68";
+
+        ctx.lineWidth = 5;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            -6,29
+        );
+
+        ctx.lineTo(
+            -8,45
+        );
+
+        ctx.moveTo(
+            6,29
+        );
+
+        ctx.lineTo(
+            8,45
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    /* =====================
+       猴子
+    ===================== */
+
+    if(type === "monkey"){
+
+        ctx.fillStyle =
+            "#A99483";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            -14,
+            -12,
+            7,
+            0,
+            Math.PI*2
+        );
+
+        ctx.arc(
+            14,
+            -12,
+            7,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            0,
+            -10,
+            17,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "#D5C2AA";
+
+        ctx.beginPath();
+
+        ctx.ellipse(
+            0,
+            -4,
+            10,
+            8,
+            0,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "#4D514F";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            -6,
+            -12,
+            2,
+            0,
+            Math.PI*2
+        );
+
+        ctx.arc(
+            6,
+            -12,
+            2,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "#B9A58F";
+
+        ctx.beginPath();
+
+        ctx.roundRect(
+            -14,
+            5,
+            28,
+            26,
+            8
+        );
+
+        ctx.fill();
+
+    }
+
+
+    /* =====================
+       青蛙
+    ===================== */
+
+    if(type === "frog"){
+
+        ctx.fillStyle =
+            "#9EAD9C";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            -9,
+            -21,
+            7,
+            0,
+            Math.PI*2
+        );
+
+        ctx.arc(
+            9,
+            -21,
+            7,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            0,
+            -10,
+            18,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "#F4F3EF";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            -7,
+            -13,
+            5,
+            0,
+            Math.PI*2
+        );
+
+        ctx.arc(
+            7,
+            -13,
+            5,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "#4D514F";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            -7,
+            -13,
+            2,
+            0,
+            Math.PI*2
+        );
+
+        ctx.arc(
+            7,
+            -13,
+            2,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "#9EAD9C";
+
+        ctx.beginPath();
+
+        ctx.roundRect(
+            -14,
+            5,
+            28,
+            26,
+            8
+        );
+
+        ctx.fill();
+
+    }
+
+
+    /* =====================
+       猫
+    ===================== */
+
+    if(type === "cat"){
+
+        ctx.fillStyle =
+            "#A8A49C";
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            -16,
+            -16
+        );
+
+        ctx.lineTo(
+            -14,
+            -31
+        );
+
+        ctx.lineTo(
+            -4,
+            -20
+        );
+
+        ctx.closePath();
+
+        ctx.fill();
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            16,
+            -16
+        );
+
+        ctx.lineTo(
+            14,
+            -31
+        );
+
+        ctx.lineTo(
+            4,
+            -20
+        );
+
+        ctx.closePath();
+
+        ctx.fill();
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            0,
+            -10,
+            17,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "#4D514F";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            -6,
+            -12,
+            2,
+            0,
+            Math.PI*2
+        );
+
+        ctx.arc(
+            6,
+            -12,
+            2,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "#A8A49C";
+
+        ctx.beginPath();
+
+        ctx.roundRect(
+            -14,
+            5,
+            28,
+            26,
+            8
+        );
+
+        ctx.fill();
+
+    }
+
+
+    ctx.restore();
+
+}
+
+
+/* =====================================================
+   首页角色图标
+===================================================== */
+
+function renderCharacterIcons(){
+
+    document
+        .querySelectorAll(
+            "[data-character-icon]"
+        )
+        .forEach(el=>{
+
+            const c =
+                document.createElement(
+                    "canvas"
+                );
+
+            c.width = 80;
+            c.height = 80;
+
+            c.style.width = "54px";
+            c.style.height = "54px";
+
+            el.innerHTML = "";
+
+            el.appendChild(c);
+
+            drawCharacter(
+                c.getContext("2d"),
+                40,
+                38,
+                el.dataset.characterIcon,
+                1
+            );
+
+        });
+
+}
+
+
+/* =====================================================
+   设置
+===================================================== */
+
+function openSettings(){
+
+    document
+        .getElementById(
+            "workEndInput"
+        )
+        .value = workEnd;
+
+    updateToggle();
+
+    showScreen("settings");
+}
+
+
+function saveSettings(){
+
+    workEnd =
+        document
+        .getElementById(
+            "workEndInput"
+        )
+        .value
+        || "18:00";
+
+    localStorage.setItem(
+        "officeWorkEnd",
+        workEnd
+    );
+
+}
+
+
+function toggleTestMode(){
+
+    testMode =
+        testMode === "true"
+        ? "false"
+        : "true";
+
+    localStorage.setItem(
+        "officeTestMode",
+        testMode
+    );
+
+    updateToggle();
+
+}
+
+
+function updateToggle(){
+
+    document
+        .getElementById(
+            "testToggle"
+        )
+        .classList.toggle(
+            "on",
+            testMode === "true"
+        );
+
+}
+
+
+/* =====================================================
+   时间
+===================================================== */
+
+function updateHomeTime(){
+
+    const now =
+        new Date();
+
+    const weekdays = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+    ];
+
+    document
+        .getElementById(
+            "weekday"
+        )
+        .textContent =
+        weekdays[now.getDay()];
+
+
+    const hh =
+        String(
+            now.getHours()
+        ).padStart(2,"0");
+
+    const mm =
+        String(
+            now.getMinutes()
+        ).padStart(2,"0");
+
+    document
+        .getElementById(
+            "clock"
+        )
+        .textContent =
+        hh + ":" + mm;
+
+
+    if(testMode === "true"){
+
+        document
+            .getElementById(
+                "countdown"
+            )
+            .textContent =
+            "现在随时可以逃";
+
+        return;
+
+    }
+
+
+    const parts =
+        workEnd.split(":");
+
+    const end =
+        new Date();
+
+    end.setHours(
+        Number(parts[0]),
+        Number(parts[1]),
+        0,
+        0
+    );
+
+    const diff =
+        end.getTime()
+        - now.getTime();
+
+
+    if(diff <= 0){
+
+        document
+            .getElementById(
+                "countdown"
+            )
+            .textContent =
+            "已经下班了";
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "countdown"
+        )
+        .textContent =
+        Math.ceil(
+            diff / 60000
+        ) + " 分钟";
+
+}
+
+
+/* =====================================================
+   图鉴
+===================================================== */
+
+function openCollection(){
+
+    renderCollection();
+
+    showScreen("collection");
+
+}
+
+
+function renderCollection(){
+
+    const grid =
+        document.getElementById(
+            "collectionGrid"
+        );
+
+    grid.innerHTML = "";
+
+    let count = 0;
+
+
+    collectibles.forEach(item=>{
+
+        const unlocked =
+            collected.includes(
+                item.id
+            );
+
+        if(unlocked){
+            count++;
+        }
+
+
+        const card =
+            document.createElement(
+                "div"
+            );
+
+        card.className =
+            "collect-card"
+            + (
+                unlocked
+                ? ""
+                : " locked"
+            );
+
+
+        const icon =
+            document.createElement(
+                "canvas"
+            );
+
+        icon.className =
+            "collect-icon";
+
+        icon.width = 70;
+        icon.height = 70;
+
+
+        drawCollectible(
+            icon,
+            item.type,
+            unlocked
+        );
+
+
+        card.appendChild(icon);
+
+
+        const name =
+            document.createElement(
+                "div"
+            );
+
+        name.className =
+            "collect-name";
+
+        name.textContent =
+            unlocked
+            ? item.name
+            : "？？？？";
+
+
+        card.appendChild(name);
+
+
+        const desc =
+            document.createElement(
+                "div"
+            );
+
+        desc.className =
+            "collect-desc";
+
+        desc.textContent =
+            unlocked
+            ? item.desc
+            : "你还没有见过它。";
+
+
+        card.appendChild(desc);
+
+    });
+
+    /*
+     * 重新生成图鉴
+     */
+
+    collectibles.forEach(item=>{
+
+        const unlocked =
+            collected.includes(item.id);
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "collect-card" +
+            (unlocked ? "" : " locked");
+
+        const icon =
+            document.createElement("canvas");
+
+        icon.className =
+            "collect-icon";
+
+        icon.width = 70;
+        icon.height = 70;
+
+        drawCollectible(
+            icon,
+            item.type,
+            unlocked
+        );
+
+        card.appendChild(icon);
+
+        const name =
+            document.createElement("div");
+
+        name.className =
+            "collect-name";
+
+        name.textContent =
+            unlocked
+            ? item.name
+            : "？？？？";
+
+        card.appendChild(name);
+
+        const desc =
+            document.createElement("div");
+
+        desc.className =
+            "collect-desc";
+
+        desc.textContent =
+            unlocked
+            ? item.desc
+            : "你还没有见过它。";
+
+        card.appendChild(desc);
+
+        grid.appendChild(card);
+
+    });
+
+    document
+        .getElementById(
+            "collectionCount"
+        )
+        .textContent =
+        collected.length +
+        " / " +
+        collectibles.length;
+
+}
+
+
+/* =====================================================
+   图鉴图标
+===================================================== */
+
+function drawCollectible(
+    canvas,
+    type,
+    visible
+){
+
+    const c =
+        canvas.getContext("2d");
+
+    c.clearRect(0,0,70,70);
+
+    c.lineWidth = 3;
+    c.lineCap = "round";
+    c.lineJoin = "round";
+
+    const main =
+        visible
+        ? "#AAB5A4"
+        : "#BFC0BA";
+
+    const dark =
+        visible
+        ? "#666C68"
+        : "#9B9C96";
+
+
+    if(type === "plant"){
+
+        c.fillStyle = "#C8A58B";
+
+        c.fillRect(
+            25,44,
+            22,16
+        );
+
+        c.fillStyle = main;
+
+        c.beginPath();
+
+        c.ellipse(
+            30,32,
+            9,16,
+            -.5,
+            0,
+            Math.PI*2
+        );
+
+        c.fill();
+
+        c.beginPath();
+
+        c.ellipse(
+            46,30,
+            8,15,
+            .5,
+            0,
+            Math.PI*2
+        );
+
+        c.fill();
+
+    }
+
+
+    if(type === "coffee"){
+
+        c.fillStyle = "#C8A58B";
+
+        c.beginPath();
+
+        c.roundRect(
+            18,25,
+            30,28,
+            5
+        );
+
+        c.fill();
+
+        c.strokeStyle = dark;
+
+        c.beginPath();
+
+        c.arc(
+            49,39,
+            8,
+            -Math.PI/2,
+            Math.PI/2
+        );
+
+        c.stroke();
+
+    }
+
+
+    if(type === "clip"){
+
+        c.strokeStyle = dark;
+
+        c.beginPath();
+
+        c.arc(
+            35,
+            35,
+            18,
+            -.8,
+            Math.PI*1.7
+        );
+
+        c.stroke();
+
+    }
+
+
+    if(type === "printer"){
+
+        c.fillStyle = "#B6B8B3";
+
+        c.fillRect(
+            15,29,
+            40,28
+        );
+
+        c.fillStyle = "#F4F3EF";
+
+        c.fillRect(
+            23,19,
+            24,17
+        );
+
+        c.fillRect(
+            23,48,
+            24,14
+        );
+
+    }
+
+
+    if(type === "key"){
+
+        c.strokeStyle = dark;
+
+        c.beginPath();
+
+        c.arc(
+            25,
+            35,
+            9,
+            0,
+            Math.PI*2
+        );
+
+        c.moveTo(
+            33,35
+        );
+
+        c.lineTo(
+            56,35
+        );
+
+        c.moveTo(
+            47,35
+        );
+
+        c.lineTo(
+            47,43
+        );
+
+        c.moveTo(
+            54,35
+        );
+
+        c.lineTo(
+            54,41
+        );
+
+        c.stroke();
+
+    }
+
+
+    if(type === "deadplant"){
+
+        c.fillStyle = "#C8A58B";
+
+        c.fillRect(
+            24,48,
+            24,13
+        );
+
+        c.strokeStyle = dark;
+
+        c.beginPath();
+
+        c.moveTo(
+            36,48
+        );
+
+        c.lineTo(
+            31,25
+        );
+
+        c.lineTo(
+            25,30
+        );
+
+        c.moveTo(
+            36,48
+        );
+
+        c.lineTo(
+            44,26
+        );
+
+        c.lineTo(
+            50,31
+        );
+
+        c.stroke();
+
+    }
+
+
+    if(type === "leave"){
+
+        c.fillStyle = "#FAF9F6";
+
+        c.fillRect(
+            20,15,
+            30,42
+        );
+
+        c.strokeStyle = dark;
+
+        c.beginPath();
+
+        c.moveTo(
+            27,29
+        );
+
+        c.lineTo(
+            44,29
+        );
+
+        c.moveTo(
+            27,38
+        );
+
+        c.lineTo(
+            44,38
+        );
+
+        c.moveTo(
+            27,47
+        );
+
+        c.lineTo(
+            40,47
+        );
+
+        c.stroke();
+
+    }
+
+
+    if(type === "banana"){
+
+        c.strokeStyle = "#B9A58F";
+
+        c.lineWidth = 6;
+
+        c.beginPath();
+
+        c.arc(
+            34,
+            34,
+            18,
+            .1,
+            1.9
+        );
+
+        c.stroke();
+
+    }
+
+
+    if(type === "box"){
+
+        c.fillStyle = "#C8A58B";
+
+        c.fillRect(
+            16,29,
+            38,28
+        );
+
+        c.strokeStyle = dark;
+
+        c.beginPath();
+
+        c.moveTo(
+            16,29
+        );
+
+        c.lineTo(
+            35,42
+        );
+
+        c.lineTo(
+            54,29
+        );
+
+        c.stroke();
+
+    }
+
+
+    if(type === "card"){
+
+        c.fillStyle = "#9DAAB0";
+
+        c.beginPath();
+
+        c.roundRect(
+            17,23,
+            38,28,
+            5
+        );
+
+        c.fill();
+
+        c.fillStyle = "#F4F3EF";
+
+        c.fillRect(
+            24,30,
+            13,5
+        );
+
+    }
+
+
+    if(type === "pen"){
+
+        c.strokeStyle = "#666C68";
+
+        c.lineWidth = 6;
+
+        c.beginPath();
+
+        c.moveTo(
+            22,51
+        );
+
+        c.lineTo(
+            50,23
+        );
+
+        c.stroke();
+
+    }
+
+
+    if(type === "cookie"){
+
+        c.fillStyle = "#C8A58B";
+
+        c.beginPath();
+
+        c.arc(
+            35,
+            36,
+            18,
+            0,
+            Math.PI*2
+        );
+
+        c.fill();
+
+        c.fillStyle = dark;
+
+        [
+            [29,29],
+            [41,29],
+            [32,42],
+            [44,43]
+        ].forEach(p=>{
+
+            c.beginPath();
+
+            c.arc(
+                p[0],
+                p[1],
+                2,
+                0,
+                Math.PI*2
+            );
+
+            c.fill();
+
+        });
+
+    }
+
+}
+
+
+/* =====================================================
+   游戏变量
+===================================================== */
+
+let player = {
+    x:65,
+    y:600
+};
+
+let boss = {
+    x:285,
+    y:115,
+    pathIndex:0
+};
+
+
+const bossPath = [
+
+    {x:285,y:115},
+    {x:285,y:270},
+    {x:210,y:270},
+    {x:210,y:430},
+    {x:80,y:430},
+    {x:80,y:240},
+    {x:285,y:115}
+
+];
+
+
+const hides = [
+
+    {
+        x:55,
+        y:150,
+        type:"plant"
+    },
+
+    {
+        x:155,
+        y:180,
+        type:"desk"
+    },
+
+    {
+        x:305,
+        y:370,
+        type:"cabinet"
+    },
+
+    {
+        x:65,
+        y:455,
+        type:"printer"
+    }
+
+];
+
+
+/* =========================
+   游戏里的收集物
+========================= */
+
+const gameItems = [
+
+    {
+        id:"coffee",
+        x:185,
+        y:125,
+        type:"coffee"
+    },
+
+    {
+        id:"leave",
+        x:278,
+        y:215,
+        type:"leave"
+    },
+
+    {
+        id:"banana",
+        x:75,
+        y:330,
+        type:"banana"
+    },
+
+    {
+        id:"box",
+        x:270,
+        y:470,
+        type:"box"
+    },
+
+    {
+        id:"pen",
+        x:105,
+        y:525,
+        type:"pen"
+    },
+
+    {
+        id:"cookie",
+        x:245,
+        y:530,
+        type:"cookie"
+    },
+
+    {
+        id:"key",
+        x:305,
+        y:500,
+        type:"key"
+    },
+
+    {
+        id:"deadplant",
+        x:310,
+        y:160,
+        type:"deadplant"
+    }
+
+];
+
+
+let exitOpen = false;
+
+let hidden = false;
+
+let hideUsed = false;
+
+let currentHideSpot = null;
+
+let hideToastShown = false;
+
+let gameRunning = false;
+
+let gameStartTime = 0;
+
+let gameDuration = 60000;
+
+let pointerDown = false;
+
+let pointerTarget = null;
+
+let currentCollectible = null;
+
+
+/* =====================================================
+   Canvas
+===================================================== */
+
+function resizeCanvas(){
+
+    const rect =
+        gameStage.getBoundingClientRect();
+
+    const scale =
+        Math.min(
+            rect.width / CW,
+            rect.height / CH
+        );
+
+    canvas.style.width =
+        CW * scale + "px";
+
+    canvas.style.height =
+        CH * scale + "px";
+
+    const dpr =
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
+
+    canvas.width =
+        CW * dpr;
+
+    canvas.height =
+        CH * dpr;
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+
+}
+
+window.addEventListener(
+    "resize",
+    resizeCanvas
+);
+
+
+/* =====================================================
+   输入
+===================================================== */
+
+function getCanvasPosition(e){
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+    return {
+
+        x:
+            (e.clientX - rect.left)
+            / rect.width
+            * CW,
+
+        y:
+            (e.clientY - rect.top)
+            / rect.height
+            * CH
+
+    };
+
+}
+
+
+canvas.addEventListener(
+    "pointerdown",
+    e=>{
+
+        if(!gameRunning){
+            return;
+        }
+
+        pointerDown = true;
+
+        const pos =
+            getCanvasPosition(e);
+
+        pointerTarget = pos;
+
+
+        const item =
+            findCollectible(
+                pos.x,
+                pos.y
+            );
+
+        if(item){
+
+            collectGameItem(item);
+
+        }
+
+
+        canvas.setPointerCapture(
+            e.pointerId
+        );
+
+    }
+);
+
+
+canvas.addEventListener(
+    "pointermove",
+    e=>{
+
+        if(!pointerDown){
+            return;
+        }
+
+        pointerTarget =
+            getCanvasPosition(e);
+
+    }
+);
+
+
+canvas.addEventListener(
+    "pointerup",
+    e=>{
+
+        if(!gameRunning){
+            return;
+        }
+
+        pointerDown = false;
+
+        pointerTarget = null;
+
+        /*
+         * 松手时检查是否进入藏身点
+         */
+
+        tryHide();
+
+    }
+);
+
+
+canvas.addEventListener(
+    "pointercancel",
+    ()=>{
+
+        pointerDown = false;
+
+        pointerTarget = null;
+
+    }
+);
+
+
+/* =====================================================
+   开始
+===================================================== */
+
+function startGame(){
+
+    showScreen("game");
+
+    resizeCanvas();
+
+    resetGame();
+
+    gameRunning = true;
+
+    gameStartTime =
+        performance.now();
+
+    lastFrame = 0;
+
+    requestAnimationFrame(
+        gameLoop
+    );
+
+}
+
+
+function resetGame(){
+
+    player.x = 65;
+    player.y = 600;
+
+    boss.x =
+        bossPath[0].x;
+
+    boss.y =
+        bossPath[0].y;
+
+    boss.pathIndex = 0;
+
+    exitOpen = false;
+
+    hidden = false;
+
+    hideUsed = false;
+
+    currentHideSpot = null;
+
+    hideToastShown = false;
+
+    currentCollectible = null;
+
+    updateCollectHint();
+
+    updateHideHint();
+
+    document
+        .getElementById(
+            "gameStatus"
+        )
+        .textContent =
+        "找地方躲起来";
+
+}
+
+
+function restartGame(){
+
+    document
+        .getElementById(
+            "resultModal"
+        )
+        .classList.remove("active");
+
+    startGame();
+
+}
+
+
+function backHome(){
+
+    document
+        .getElementById(
+            "resultModal"
+        )
+        .classList.remove("active");
+
+    showScreen("home");
+
+    updateHomeTime();
+
+}
+
+
+/* =====================================================
+   玩家移动
+===================================================== */
+
+function updatePlayer(delta){
+
+    if(
+        !pointerDown ||
+        !pointerTarget ||
+        hidden
+    ){
+        return;
+    }
+
+
+    let dx =
+        pointerTarget.x
+        - player.x;
+
+    let dy =
+        pointerTarget.y
+        - player.y;
+
+    const distance =
+        Math.hypot(dx,dy);
+
+
+    if(distance < 4){
+        return;
+    }
+
+
+    dx /= distance;
+    dy /= distance;
+
+
+    const speed = 155;
+
+
+    player.x +=
+        dx * speed * delta;
+
+    player.y +=
+        dy * speed * delta;
+
+
+    player.x =
+        Math.max(
+            22,
+            Math.min(
+                CW - 22,
+                player.x
+            )
+        );
+
+
+    player.y =
+        Math.max(
+            70,
+            Math.min(
+                CH - 28,
+                player.y
+            )
+        );
+
+}
+
+
+/* =====================================================
+   老板
+===================================================== */
+
+function updateBoss(delta){
+
+    const target =
+        bossPath[
+            boss.pathIndex
+        ];
+
+    const dx =
+        target.x - boss.x;
+
+    const dy =
+        target.y - boss.y;
+
+    const distance =
+        Math.hypot(dx,dy);
+
+
+    if(distance < 4){
+
+        boss.pathIndex =
+            (
+                boss.pathIndex + 1
+            )
+            % bossPath.length;
+
+        return;
+
+    }
+
+
+    const speed = 65;
+
+
+    boss.x +=
+        dx / distance
+        * speed
+        * delta;
+
+    boss.y +=
+        dy / distance
+        * speed
+        * delta;
+
+}
+
+
+/* =====================================================
+   收集物检测
+===================================================== */
+
+function findCollectible(
+    x,
+    y
+){
+
+    for(
+        const item of gameItems
+    ){
+
+        if(
+            collected.includes(
+                item.id
+            )
+        ){
+            continue;
+        }
+
+
+        const distance =
+            Math.hypot(
+                x - item.x,
+                y - item.y
+            );
+
+
+        if(distance < 25){
+
+            return item;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =====================================================
+   收集
+===================================================== */
+
+function collectGameItem(item){
+
+    if(
+        collected.includes(
+            item.id
+        )
+    ){
+        return;
+    }
+
+
+    collected.push(
+        item.id
+    );
+
+
+    localStorage.setItem(
+        "officeCollected",
+        JSON.stringify(
+            collected
+        )
+    );
+
+
+    const data =
+        collectibles.find(
+            x=>x.id === item.id
+        );
+
+
+    if(data){
+
+        showToast(
+            "发现：" + data.name
+        );
+
+    }
+
+
+    currentCollectible = null;
+
+    updateCollectHint();
+
+}
+
+
+/* =====================================================
+   收集提示
+===================================================== */
+
+function updateCollectHint(){
+
+    const hint =
+        document.getElementById(
+            "collectHint"
+        );
+
+    if(
+        currentCollectible
+        &&
+        !collected.includes(
+            currentCollectible.id
+        )
+    ){
+
+        hint.textContent =
+            "点击收集";
+
+        hint.classList.add(
+            "show"
+        );
+
+    }else{
+
+        hint.classList.remove(
+            "show"
+        );
+
+    }
+
+}
+
+
+function checkNearbyCollectible(){
+
+    currentCollectible = null;
+
+
+    for(
+        const item of gameItems
+    ){
+
+        if(
+            collected.includes(
+                item.id
+            )
+        ){
+            continue;
+        }
+
+
+        const distance =
+            Math.hypot(
+                player.x - item.x,
+                player.y - item.y
+            );
+
+
+        if(distance < 32){
+
+            currentCollectible =
+                item;
+
+            break;
+
+        }
+
+    }
+
+
+    updateCollectHint();
+
+}
+
+
+/* =====================================================
+   躲藏检测
+===================================================== */
+
+function checkNearbyHide(){
+
+    currentHideSpot = null;
+
+    if(hidden){
+        updateHideHint();
+        return;
+    }
+
+
+    let closest = null;
+    let closestDistance = Infinity;
+
+
+    for(
+        const spot of hides
+    ){
+
+        const distance =
+            Math.hypot(
+                player.x - spot.x,
+                player.y - spot.y
+            );
+
+
+        if(
+            distance < 58 &&
+            distance < closestDistance
+        ){
+
+            closest = spot;
+            closestDistance = distance;
+
+        }
+
+    }
+
+
+    currentHideSpot = closest;
+
+    updateHideHint();
+
+}
+
+
+function updateHideHint(){
+
+    const hint =
+        document.getElementById(
+            "hideHint"
+        );
+
+    if(
+        currentHideSpot &&
+        !hidden
+    ){
+
+        hint.classList.add(
+            "show"
+        );
+
+    }else{
+
+        hint.classList.remove(
+            "show"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   躲藏
+===================================================== */
+
+function tryHide(){
+
+    if(hidden){
+        return;
+    }
+
+
+    for(
+        const spot of hides
+    ){
+
+        const distance =
+            Math.hypot(
+                player.x - spot.x,
+                player.y - spot.y
+            );
+
+
+        if(distance < 42){
+
+            hidden = true;
+
+            hideUsed = true;
+
+            currentHideSpot = spot;
+
+            player.x = spot.x;
+            player.y = spot.y;
+
+
+            document
+                .getElementById(
+                    "gameStatus"
+                )
+                .textContent =
+                "已藏好 · 别动";
+
+
+            updateHideHint();
+
+
+            /*
+             * 第一次躲成功
+             * 打开出口
+             */
+
+            if(!exitOpen){
+
+                exitOpen = true;
+
+                showToast(
+                    "出口打开了"
+                );
+
+            }
+
+
+            /*
+             * 植物第一次触发
+             */
+
+            if(
+                spot.type === "plant"
+                &&
+                !collected.includes("plant")
+            ){
+
+                collectGameItem({
+                    id:"plant"
+                });
+
+            }
+
+
+            /*
+             * 藏好提示
+             */
+
+            if(!hideToastShown){
+
+                showToast(
+                    "已藏好 ✓"
+                );
+
+                hideToastShown = true;
+
+            }
+
+
+            /*
+             * 1.6 秒后自动出来
+             */
+
+            setTimeout(
+                ()=>{
+
+                    if(gameRunning){
+
+                        hidden = false;
+
+                        currentHideSpot = null;
+
+                        document
+                            .getElementById(
+                                "gameStatus"
+                            )
+                            .textContent =
+                            exitOpen
+                            ? "快跑，出口开了"
+                            : "找地方躲起来";
+
+                    }
+
+                },
+                1600
+            );
+
+
+            break;
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   碰撞
+===================================================== */
+
+function checkBossCollision(){
+
+    if(hidden){
+        return false;
+    }
+
+
+    return (
+        Math.hypot(
+            player.x - boss.x,
+            player.y - boss.y
+        )
+        < 25
+    );
+
+}
+
+
+/* =====================================================
+   结束
+===================================================== */
+
+function finishGame(
+    success,
+    reason
+){
+
+    gameRunning = false;
+
+    pointerDown = false;
+
+    pointerTarget = null;
+
+
+    document
+        .getElementById(
+            "collectHint"
+        )
+        .classList.remove(
+            "show"
+        );
+
+    document
+        .getElementById(
+            "hideHint"
+        )
+        .classList.remove(
+            "show"
+        );
+
+
+    document
+        .getElementById(
+            "resultTitle"
+        )
+        .textContent =
+        success
+        ? "逃跑成功"
+        : "逃跑失败";
+
+
+    document
+        .getElementById(
+            "resultText"
+        )
+        .textContent =
+        reason;
+
+
+    document
+        .getElementById(
+            "resultModal"
+        )
+        .classList.add(
+            "active"
+        );
+
+
+    let count =
+        Number(
+            localStorage.getItem(
+                "officeEscapeCount"
+            ) || 0
+        );
+
+
+    count++;
+
+
+    localStorage.setItem(
+        "officeEscapeCount",
+        count
+    );
+
+}
+
+
+/* =====================================================
+   游戏循环
+===================================================== */
+
+let lastFrame = 0;
+
+function gameLoop(timestamp){
+
+    if(!gameRunning){
+        return;
+    }
+
+
+    if(!lastFrame){
+        lastFrame = timestamp;
+    }
+
+
+    const delta =
+        Math.min(
+            (timestamp - lastFrame)
+            / 1000,
+            .05
+        );
+
+
+    lastFrame = timestamp;
+
+
+    updatePlayer(delta);
+
+    updateBoss(delta);
+
+    checkNearbyCollectible();
+
+    checkNearbyHide();
+
+    drawGame();
+
+
+    /*
+     * 被老板抓到
+     */
+
+    if(
+        checkBossCollision()
+    ){
+
+        finishGame(
+            false,
+            "老板刚好转过头。"
+        );
+
+        lastFrame = 0;
+
+        return;
+
+    }
+
+
+    /*
+     * 逃到出口
+     */
+
+    if(
+        exitOpen &&
+        player.y > 665 &&
+        player.x > 140 &&
+        player.x < 220
+    ){
+
+        finishGame(
+            true,
+            "你从办公室门口逃了出去。"
+        );
+
+        lastFrame = 0;
+
+        return;
+
+    }
+
+
+    /*
+     * 一分钟结束
+     */
+
+    if(
+        timestamp - gameStartTime
+        >= gameDuration
+    ){
+
+        finishGame(
+            false,
+            "一分钟过去了，你还在办公室。"
+        );
+
+        lastFrame = 0;
+
+        return;
+
+    }
+
+
+    requestAnimationFrame(
+        gameLoop
+    );
+
+}
+
+
+/* =====================================================
+   绘制游戏
+===================================================== */
+
+function drawGame(){
+
+    ctx.clearRect(
+        0,
+        0,
+        CW,
+        CH
+    );
+
+    drawOffice();
+
+    drawCollectiblesInOffice();
+
+    drawExit();
+
+    drawHideSpots();
+
+    drawBoss();
+
+
+    /*
+     * 角色
+     *
+     * 躲好以后：
+     * 半透明
+     */
+
+    ctx.save();
+
+    if(hidden){
+
+        ctx.globalAlpha = .48;
+
+    }else{
+
+        ctx.globalAlpha = 1;
+
+    }
+
+    drawCharacter(
+        ctx,
+        player.x,
+        player.y,
+        selectedCharacter,
+        .78
+    );
+
+    ctx.restore();
+
+
+    /*
+     * 再画一次藏身物前景
+     * 让角色真正被挡住
+     */
+
+    if(hidden && currentHideSpot){
+
+        drawHideForeground(
+            currentHideSpot
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   办公室
+===================================================== */
+
+function drawOffice(){
+
+    /*
+     * 墙
+     */
+
+    ctx.fillStyle =
+        "#F4F3EF";
+
+    ctx.fillRect(
+        0,
+        0,
+        CW,
+        100
+    );
+
+
+    /*
+     * 地板
+     */
+
+    ctx.fillStyle =
+        "#DDDCD6";
+
+    ctx.fillRect(
+        0,
+        100,
+        CW,
+        560
+    );
+
+
+    /*
+     * 窗户
+     */
+
+    ctx.fillStyle =
+        "#C7D0D0";
+
+    ctx.fillRect(
+        30,
+        45,
+        85,
+        50
+    );
+
+    ctx.strokeStyle =
+        "#A9B0AE";
+
+    ctx.lineWidth = 3;
+
+    ctx.strokeRect(
+        30,
+        45,
+        85,
+        50
+    );
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        72,
+        45
+    );
+
+    ctx.lineTo(
+        72,
+        95
+    );
+
+    ctx.stroke();
+
+
+    /*
+     * 桌子
+     */
+
+    drawDesk(
+        120,
+        135
+    );
+
+    drawDesk(
+        225,
+        135
+    );
+
+    drawDesk(
+        120,
+        350
+    );
+
+    drawDesk(
+        225,
+        350
+    );
+
+
+    /*
+     * 柜子
+     */
+
+    ctx.fillStyle =
+        "#BFC0BB";
+
+    ctx.fillRect(
+        285,
+        285,
+        45,
+        110
+    );
+
+    ctx.strokeStyle =
+        "#969B97";
+
+    ctx.strokeRect(
+        285,
+        285,
+        45,
+        110
+    );
+
+
+    /*
+     * 门
+     */
+
+    ctx.fillStyle =
+        "#C8A58B";
+
+    ctx.fillRect(
+        135,
+        660,
+        90,
+        60
+    );
+
+
+    ctx.strokeStyle =
+        "#9D8C7B";
+
+    ctx.strokeRect(
+        135,
+        660,
+        90,
+        60
+    );
+
+
+    ctx.fillStyle =
+        "#6F746F";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        210,
+        690,
+        3,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+}
+
+
+/* =====================================================
+   桌子
+===================================================== */
+
+function drawDesk(x,y){
+
+    ctx.fillStyle =
+        "#C8C7C0";
+
+    ctx.fillRect(
+        x,
+        y,
+        75,
+        42
+    );
+
+
+    ctx.fillStyle =
+        "#A7AAA5";
+
+    ctx.fillRect(
+        x+10,
+        y+42,
+        7,
+        45
+    );
+
+    ctx.fillRect(
+        x+58,
+        y+42,
+        7,
+        45
+    );
+
+
+    /*
+     * 电脑
+     */
+
+    ctx.fillStyle =
+        "#969B97";
+
+    ctx.fillRect(
+        x+23,
+        y-27,
+        30,
+        23
+    );
+
+
+    ctx.fillStyle =
+        "#E8E8E2";
+
+    ctx.fillRect(
+        x+27,
+        y-23,
+        22,
+        15
+    );
+
+}
+
+
+/* =====================================================
+   游戏里的收集物
+===================================================== */
+
+function drawCollectiblesInOffice(){
+
+    gameItems.forEach(item=>{
+
+        if(
+            collected.includes(
+                item.id
+            )
+        ){
+            return;
+        }
+
+
+        drawGameCollectible(
+            item
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+   收集物绘制
+===================================================== */
+
+function drawGameCollectible(item){
+
+    const x = item.x;
+    const y = item.y;
+
+
+    ctx.fillStyle =
+        "rgba(77,81,79,.10)";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        x,
+        y+12,
+        14,
+        4,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.strokeStyle =
+        "#9CA59E";
+
+    ctx.lineWidth = 1.5;
+
+
+    if(item.type === "coffee"){
+
+        ctx.fillStyle =
+            "#C8A58B";
+
+        ctx.beginPath();
+
+        ctx.roundRect(
+            x-10,
+            y-12,
+            20,
+            19,
+            4
+        );
+
+        ctx.fill();
+
+        ctx.stroke();
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x+11,
+            y-3,
+            7,
+            -Math.PI/2,
+            Math.PI/2
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    if(item.type === "leave"){
+
+        ctx.fillStyle =
+            "#FAF9F6";
+
+        ctx.fillRect(
+            x-11,
+            y-15,
+            22,
+            30
+        );
+
+        ctx.strokeRect(
+            x-11,
+            y-15,
+            22,
+            30
+        );
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x-6,
+            y-5
+        );
+
+        ctx.lineTo(
+            x+6,
+            y-5
+        );
+
+        ctx.moveTo(
+            x-6,
+            y+2
+        );
+
+        ctx.lineTo(
+            x+6,
+            y+2
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    if(item.type === "banana"){
+
+        ctx.strokeStyle =
+            "#B9A58F";
+
+        ctx.lineWidth = 6;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            y,
+            14,
+            .1,
+            1.9
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    if(item.type === "box"){
+
+        ctx.fillStyle =
+            "#C8A58B";
+
+        ctx.fillRect(
+            x-17,
+            y-12,
+            34,
+            24
+        );
+
+        ctx.strokeRect(
+            x-17,
+            y-12,
+            34,
+            24
+        );
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x-17,
+            y-12
+        );
+
+        ctx.lineTo(
+            x,
+            y
+        );
+
+        ctx.lineTo(
+            x+17,
+            y-12
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    if(item.type === "pen"){
+
+        ctx.strokeStyle =
+            "#666C68";
+
+        ctx.lineWidth = 5;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x-10,
+            y+10
+        );
+
+        ctx.lineTo(
+            x+10,
+            y-10
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    if(item.type === "cookie"){
+
+        ctx.fillStyle =
+            "#C8A58B";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            y,
+            12,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "#666C68";
+
+        [
+            [-5,-4],
+            [5,-5],
+            [-3,5],
+            [5,5]
+        ].forEach(p=>{
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x+p[0],
+                y+p[1],
+                2,
+                0,
+                Math.PI*2
+            );
+
+            ctx.fill();
+
+        });
+
+    }
+
+
+    if(item.type === "key"){
+
+        ctx.strokeStyle =
+            "#666C68";
+
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x-7,
+            y,
+            7,
+            0,
+            Math.PI*2
+        );
+
+        ctx.moveTo(
+            x,
+            y
+        );
+
+        ctx.lineTo(
+            x+15,
+            y
+        );
+
+        ctx.moveTo(
+            x+9,
+            y
+        );
+
+        ctx.lineTo(
+            x+9,
+            y+6
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    if(item.type === "deadplant"){
+
+        ctx.fillStyle =
+            "#C8A58B";
+
+        ctx.fillRect(
+            x-11,
+            y,
+            22,
+            13
+        );
+
+        ctx.strokeStyle =
+            "#777D78";
+
+        ctx.lineWidth = 2;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x,
+            y
+        );
+
+        ctx.lineTo(
+            x-5,
+            y-17
+        );
+
+        ctx.lineTo(
+            x-11,
+            y-12
+        );
+
+        ctx.moveTo(
+            x,
+            y
+        );
+
+        ctx.lineTo(
+            x+7,
+            y-15
+        );
+
+        ctx.lineTo(
+            x+12,
+            y-10
+        );
+
+        ctx.stroke();
+
+    }
+
+}
+
+
+/* =====================================================
+   躲藏点
+===================================================== */
+
+function drawHideSpots(){
+
+    hides.forEach(spot=>{
+
+        const distance =
+            Math.hypot(
+                player.x - spot.x,
+                player.y - spot.y
+            );
+
+        const near =
+            distance < 58 &&
+            !hidden;
+
+
+        /*
+         * 附近时出现淡淡的虚线范围
+         */
+
+        if(near){
+
+            ctx.save();
+
+            ctx.strokeStyle =
+                "#9AA69B";
+
+            ctx.lineWidth = 1;
+
+            ctx.setLineDash([4,4]);
+
+            ctx.globalAlpha = .65;
+
+            ctx.beginPath();
+
+            ctx.arc(
+                spot.x,
+                spot.y,
+                34,
+                0,
+                Math.PI*2
+            );
+
+            ctx.stroke();
+
+            ctx.restore();
+
+        }
+
+
+        /*
+         * =====================
+         * 植物
+         * =====================
+         */
+
+        if(spot.type === "plant"){
+
+            ctx.fillStyle =
+                "#C8A58B";
+
+            ctx.fillRect(
+                43,
+                165,
+                25,
+                18
+            );
+
+            ctx.strokeStyle =
+                "#9D8C7B";
+
+            ctx.lineWidth = 1.5;
+
+            ctx.strokeRect(
+                43,
+                165,
+                25,
+                18
+            );
+
+
+            ctx.fillStyle =
+                "#AAB5A4";
+
+            ctx.beginPath();
+
+            ctx.ellipse(
+                50,
+                145,
+                11,
+                20,
+                -.5,
+                0,
+                Math.PI*2
+            );
+
+            ctx.fill();
+
+
+            ctx.beginPath();
+
+            ctx.ellipse(
+                65,
+                145,
+                10,
+                17,
+                .5,
+                0,
+                Math.PI*2
+            );
+
+            ctx.fill();
+
+
+            ctx.strokeStyle =
+                "#7E8B80";
+
+            ctx.lineWidth = 2;
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                56,
+                164
+            );
+
+            ctx.lineTo(
+                57,
+                137
+            );
+
+            ctx.stroke();
+
+        }
+
+
+        /*
+         * =====================
+         * 桌子
+         * =====================
+         */
+
+        if(spot.type === "desk"){
+
+            ctx.fillStyle =
+                "#C8C7C0";
+
+            ctx.fillRect(
+                118,
+                143,
+                75,
+                18
+            );
+
+            ctx.strokeStyle =
+                "#999C97";
+
+            ctx.lineWidth = 1.5;
+
+            ctx.strokeRect(
+                118,
+                143,
+                75,
+                18
+            );
+
+
+            ctx.fillStyle =
+                "#A7AAA5";
+
+            ctx.fillRect(
+                126,
+                161,
+                7,
+                55
+            );
+
+            ctx.fillRect(
+                178,
+                161,
+                7,
+                55
+            );
+
+
+            /*
+             * 电脑
+             */
+
+            ctx.fillStyle =
+                "#969B97";
+
+            ctx.fillRect(
+                141,
+                116,
+                30,
+                25
+            );
+
+            ctx.fillStyle =
+                "#E8E8E2";
+
+            ctx.fillRect(
+                145,
+                120,
+                22,
+                15
+            );
+
+
+            /*
+             * 桌子下面的虚线区域
+             */
+
+            ctx.strokeStyle =
+                "#8E938F";
+
+            ctx.setLineDash([3,3]);
+
+            ctx.strokeRect(
+                136,
+                164,
+                46,
+                45
+            );
+
+            ctx.setLineDash([]);
+
+        }
+
+
+        /*
+         * =====================
+         * 文件柜
+         * =====================
+         */
+
+        if(spot.type === "cabinet"){
+
+            ctx.fillStyle =
+                "#BFC0BB";
+
+            ctx.fillRect(
+                280,
+                280,
+                50,
+                120
+            );
+
+            ctx.strokeStyle =
+                "#969B97";
+
+            ctx.lineWidth = 1.5;
+
+            ctx.strokeRect(
+                280,
+                280,
+                50,
+                120
+            );
+
+
+            ctx.strokeStyle =
+                "#9DA19C";
+
+            ctx.strokeRect(
+                286,
+                290,
+                38,
+                35
+            );
+
+            ctx.strokeRect(
+                286,
+                332,
+                38,
+                35
+            );
+
+            ctx.strokeRect(
+                286,
+                374,
+                38,
+                18
+            );
+
+
+            ctx.fillStyle =
+                "#858A86";
+
+            ctx.fillRect(
+                302,
+                306,
+                8,
+                3
+            );
+
+            ctx.fillRect(
+                302,
+                348,
+                8,
+                3
+            );
+
+        }
+
+
+        /*
+         * =====================
+         * 打印机
+         * =====================
+         */
+
+        if(spot.type === "printer"){
+
+            ctx.fillStyle =
+                "#B6B8B3";
+
+            ctx.fillRect(
+                40,
+                435,
+                48,
+                32
+            );
+
+            ctx.strokeStyle =
+                "#969B97";
+
+            ctx.lineWidth = 1.5;
+
+            ctx.strokeRect(
+                40,
+                435,
+                48,
+                32
+            );
+
+
+            ctx.fillStyle =
+                "#FAF9F6";
+
+            ctx.fillRect(
+                50,
+                428,
+                28,
+                15
+            );
+
+            ctx.strokeStyle =
+                "#B1B3AE";
+
+            ctx.strokeRect(
+                50,
+                428,
+                28,
+                15
+            );
+
+
+            ctx.fillStyle =
+                "#8E938F";
+
+            ctx.fillRect(
+                49,
+                451,
+                30,
+                5
+            );
+
+        }
+
+
+        /*
+         * 靠近时显示“可以躲”
+         */
+
+        if(near){
+
+            ctx.save();
+
+            ctx.fillStyle =
+                "rgba(250,249,246,.92)";
+
+            ctx.strokeStyle =
+                "#D0D1CB";
+
+            ctx.lineWidth = 1;
+
+            ctx.beginPath();
+
+            ctx.roundRect(
+                spot.x - 27,
+                spot.y - 48,
+                54,
+                22,
+                11
+            );
+
+            ctx.fill();
+
+            ctx.stroke();
+
+            ctx.fillStyle =
+                "#737874";
+
+            ctx.font =
+                "11px sans-serif";
+
+            ctx.textAlign =
+                "center";
+
+            ctx.textBaseline =
+                "middle";
+
+            ctx.fillText(
+                "可以躲",
+                spot.x,
+                spot.y - 37
+            );
+
+            ctx.restore();
+
+        }
+
+    });
+
+}
+
+
+/* =====================================================
+   藏身物前景
+===================================================== */
+
+function drawHideForeground(spot){
+
+    if(!spot){
+        return;
+    }
+
+
+    /*
+     * 植物前景
+     */
+
+    if(spot.type === "plant"){
+
+        ctx.save();
+
+        ctx.fillStyle =
+            "#AAB5A4";
+
+        ctx.beginPath();
+
+        ctx.ellipse(
+            49,
+            151,
+            13,
+            23,
+            -.6,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.beginPath();
+
+        ctx.ellipse(
+            66,
+            153,
+            12,
+            21,
+            .6,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+        ctx.restore();
+
+    }
+
+
+    /*
+     * 桌子前景
+     */
+
+    if(spot.type === "desk"){
+
+        ctx.fillStyle =
+            "#C8C7C0";
+
+        ctx.fillRect(
+            118,
+            143,
+            75,
+            18
+        );
+
+    }
+
+
+    /*
+     * 柜子前景
+     */
+
+    if(spot.type === "cabinet"){
+
+        ctx.fillStyle =
+            "#BFC0BB";
+
+        ctx.fillRect(
+            280,
+            285,
+            7,
+            105
+        );
+
+    }
+
+
+    /*
+     * 打印机前景
+     */
+
+    if(spot.type === "printer"){
+
+        ctx.fillStyle =
+            "#B6B8B3";
+
+        ctx.fillRect(
+            40,
+            435,
+            48,
+            32
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   出口
+===================================================== */
+
+function drawExit(){
+
+    ctx.fillStyle =
+        exitOpen
+        ? "#AAB5A4"
+        : "#C2C2BC";
+
+    ctx.fillRect(
+        140,
+        665,
+        80,
+        55
+    );
+
+
+    ctx.fillStyle =
+        "#F4F3EF";
+
+    ctx.font =
+        "12px sans-serif";
+
+    ctx.textAlign =
+        "center";
+
+    ctx.fillText(
+        exitOpen
+        ? "EXIT"
+        : "出口",
+        180,
+        695
+    );
+
+}
+
+
+/* =====================================================
+   老板
+===================================================== */
+
+function drawBoss(){
+
+    const x = boss.x;
+    const y = boss.y;
+
+
+    /*
+     * 身体
+     */
+
+    ctx.fillStyle =
+        "#9DAAB0";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        x,
+        y+25,
+        25,
+        35,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /*
+     * 肚子
+     */
+
+    ctx.fillStyle =
+        "#B9BBB6";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        x,
+        y+30,
+        21,
+        25,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /*
+     * 头
+     */
+
+    ctx.fillStyle =
+        "#C8A58B";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x,
+        y,
+        18,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /*
+     * 地中海发型
+     */
+
+    ctx.fillStyle =
+        "#6D716D";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x-12,
+        y-3,
+        7,
+        Math.PI*.5,
+        Math.PI*1.5
+    );
+
+    ctx.arc(
+        x+12,
+        y-3,
+        7,
+        -Math.PI*.5,
+        Math.PI*.5
+    );
+
+    ctx.fill();
+
+
+    /*
+     * 眼睛
+     */
+
+    ctx.fillStyle =
+        "#4D514F";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x-6,
+        y+1,
+        2,
+        0,
+        Math.PI*2
+    );
+
+    ctx.arc(
+        x+6,
+        y+1,
+        2,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /*
+     * 腿
+     */
+
+    ctx.strokeStyle =
+        "#666C68";
+
+    ctx.lineWidth = 5;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        x-8,
+        y+55
+    );
+
+    ctx.lineTo(
+        x-8,
+        y+76
+    );
+
+    ctx.moveTo(
+        x+8,
+        y+55
+    );
+
+    ctx.lineTo(
+        x+8,
+        y+76
+    );
+
+    ctx.stroke();
+
+}
+
+
+/* =====================================================
+   工作模式
+===================================================== */
+
+function showWorkMask(){
+
+    document
+        .getElementById(
+            "workMask"
+        )
+        .classList.add(
+            "active"
+        );
+
+}
+
+
+function hideWorkMask(){
+
+    document
+        .getElementById(
+            "workMask"
+        )
+        .classList.remove(
+            "active"
+        );
+
+}
+
+
+/* =====================================================
+   Toast
+===================================================== */
+
+let toastTimer;
+
+function showToast(text){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+    toast.textContent =
+        text;
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            ()=>{
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            1800
+        );
+
+}
+
+
+/* =====================================================
+   初始化
+===================================================== */
+
+updateCharacterCards();
+
+renderCharacterIcons();
+
+updateHomeTime();
+
+setInterval(
+    updateHomeTime,
+    1000
+);
+
+resizeCanvas();
+
+</script>
+
+</body>
+</html>
+```
